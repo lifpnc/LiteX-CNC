@@ -35,6 +35,11 @@ class EncoderConfig(BaseModel):
         "LVCMOS33",
         description="The IO Standard (voltage) to use for the pins."
     )
+    misc: str = Field(
+        "",
+        description="The misc parameters (pullup for example) to use for the pin."
+    )
+
 
 
 class EncoderModule(Module, AutoDoc):
@@ -234,16 +239,16 @@ class EncoderModule(Module, AutoDoc):
             if config.pin_Z:
                 soc.platform.add_extension([
                     ("encoder", index,
-                        Subsignal(Pins(encoder_config.pin_A), IOStandard(encoder_config.io_standard)),
-                        Subsignal(Pins(encoder_config.pin_B), IOStandard(encoder_config.io_standard)),
-                        Subsignal(Pins(encoder_config.pin_Z), IOStandard(encoder_config.io_standard))
+                        Subsignal(Pins(encoder_config.pin_A), IOStandard(encoder_config.io_standard), Misc(encoder_config.misc)),
+                        Subsignal(Pins(encoder_config.pin_B), IOStandard(encoder_config.io_standard), Misc(encoder_config.misc)),
+                        Subsignal(Pins(encoder_config.pin_Z), IOStandard(encoder_config.io_standard), Misc(encoder_config.misc))
                     )
                 ])
             else:
                 soc.platform.add_extension([
                     ("encoder", index,
-                        Subsignal(Pins(encoder_config.pin_A), IOStandard(encoder_config.io_standard)),
-                        Subsignal(Pins(encoder_config.pin_B), IOStandard(encoder_config.io_standard))
+                        Subsignal(Pins(encoder_config.pin_A), IOStandard(encoder_config.io_standard), Misc(encoder_config.misc)),
+                        Subsignal(Pins(encoder_config.pin_B), IOStandard(encoder_config.io_standard), Misc(encoder_config.misc))
                     )
                 ])
             # Create the encoder
@@ -311,3 +316,4 @@ if __name__ == "__main__":
     print("\nRunning Sim...\n")
     # print(verilog.convert(stepgen, stepgen.ios, "pre_scaler"))
     run_simulation(encoder, test_encoder(encoder))
+`

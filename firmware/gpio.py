@@ -27,6 +27,10 @@ class GPIO(BaseModel):
         "LVCMOS33",
         description="The IO Standard (voltage) to use for the pin."
     )
+    misc: str = Field(
+        "",
+        description="Misc parameters (pullup or something other) to use for the pin."
+    )
 
 
 def _to_signal(obj):
@@ -58,7 +62,7 @@ class GPIO_Out(Module, AutoDoc):
         
         # Add the pins for the GPIO out
         soc.platform.add_extension([
-            ("gpio_out", index, Pins(gpio.pin), IOStandard(gpio.io_standard))
+            ("gpio_out", index, Pins(gpio.pin), IOStandard(gpio.io_standard), Misc(gpio.misc))
             for index, gpio 
             in enumerate(config)
         ])
@@ -125,7 +129,7 @@ class GPIO_In(Module, AutoDoc):
         
         # Add the pins for the GPIO out
         soc.platform.add_extension([
-            ("gpio_in", index, Pins(gpio.pin), IOStandard(gpio.io_standard))
+            ("gpio_in", index, Pins(gpio.pin), IOStandard(gpio.io_standard), Misc(gpio.misc))
             for index, gpio 
             in enumerate(config)
         ])
